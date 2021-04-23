@@ -1,0 +1,16 @@
+{
+  "presets": ["@babel/preset-env", "@babel/preset-react"],
+  "plugins": [
+    "@babel/plugin-transform-runtime",
+    [
+      "import",
+      {
+        "libraryName": "antd",
+        "libraryDirectory": "lib", //or "lib" for default
+        "style": true
+        //No "style" setting
+      }
+    ]
+  ],
+  "sourceType": "unambiguous"
+}
