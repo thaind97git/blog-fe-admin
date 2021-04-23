@@ -5,7 +5,7 @@ import { ConnectedRouter } from 'connected-react-router';
 import { ToastContainer } from 'react-toastify';
 import { Helmet } from 'react-helmet-async';
 
-import Layout from '@/layouts';
+import AppLayout from '@/layouts';
 import PageLoading from '@/components/Page-Loading';
 
 // multi language
@@ -29,7 +29,7 @@ const ReactApp = () => {
 
       <ConnectedRouter history={history}>
         <Suspense fallback={<PageLoading show />}>
-          <Layout />
+          <AppLayout />
           <PageLoading />
         </Suspense>
       </ConnectedRouter>

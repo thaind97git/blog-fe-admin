@@ -5,5 +5,6 @@ export const setDisplayLayout = (payload = {}) => ({
   payload: {
     header: !!payload.header,
     footer: !!payload.footer,
+    navLeft: !!payload.navLeft,
   },
 });

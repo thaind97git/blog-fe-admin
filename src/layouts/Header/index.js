@@ -1,29 +1,27 @@
-// import { getIsAuthenticated } from '@/store/selectors/auth';
-import { getDisplayLayout } from '@/store/selectors/layout';
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { Layout } from 'antd';
 
-const Header = () => {
-  const { header } = useSelector(getDisplayLayout);
-  // const isAuthenticated = useSelector(getIsAuthenticated);
-  // if (!isAuthenticated || !header) {
-  //   return null;
-  // }
+import { NAV_LEFT_W, NAV_LEFT_W_COLLAPSED } from '../constants';
 
-  if (!header) {
+const { Header } = Layout;
+
+const AppHeader = ({ display, collapsed }) => {
+  if (!display) {
     return null;
   }
   return (
-    <header>
-      <div className="container">
-        <nav className="navbar">
-          <a href="#" className="logo">
-            Logo
-          </a>
-        </nav>
-      </div>
+    <header className="header">
+      <Header
+        className="site-layout-background header__fixed"
+        style={{
+          padding: 0,
+          width: `calc(100vw - ${
+            collapsed ? NAV_LEFT_W_COLLAPSED : NAV_LEFT_W
+          }px)`,
+        }}
+      />
     </header>
   );
 };
 
-export default Header;
+export default AppHeader;

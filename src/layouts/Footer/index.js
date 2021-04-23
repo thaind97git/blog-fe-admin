@@ -1,27 +1,15 @@
-// import { getIsAuthenticated } from '@/store/selectors/auth';
-import { getDisplayLayout } from '@/store/selectors/layout';
+import { Layout } from 'antd';
 import React from 'react';
-import { useSelector } from 'react-redux';
-
-const Footer = () => {
-  const { footer } = useSelector(getDisplayLayout);
-  // const isAuthenticated = useSelector(getIsAuthenticated);
-  // if (!isAuthenticated || !footer) {
-  //   return null;
-  // }
-
-  if (!footer) {
+const { Footer } = Layout;
+const AppFooter = ({ display = false }) => {
+  if (!display) {
     return null;
   }
   return (
-    <div id="footer">
-      <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-      ></link>
-      <h1>Footer</h1>
-    </div>
+    <Footer style={{ textAlign: 'center' }}>
+      Ant design ©{new Date().getFullYear()} Created by thaind97git
+    </Footer>
   );
 };
 
-export default Footer;
+export default AppFooter;

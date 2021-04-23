@@ -1,20 +1,26 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import routes from '@/router';
 import { useDispatch } from 'react-redux';
-import { getDisplayLayout } from '@/store/selectors/layout';
-import { compareTwoObject } from '@/utils';
-import { setDisplayLayout } from '@/store/actions/layout';
-import { useShallowEqualSelector } from '@/hooks/useShallowEqualSelector';
 
-const Main = () => {
+import routes from '@/router';
+import { useShallowEqualSelector } from '@/hooks/useShallowEqualSelector';
+import { getDisplayLayout } from '@/store/selectors/layout';
+import { setDisplayLayout } from '@/store/actions/layout';
+import { compareTwoObject } from '@/utils';
+import { HEADER_H } from '../constants';
+
+const Main = ({ isAuthenticated }) => {
   const layout = useShallowEqualSelector(getDisplayLayout);
   const dispatch = useDispatch();
 
   const updateDisplayLayout = (currentLayout, layout) => {
     const layoutUpdated = currentLayout
-      ? { header: !!currentLayout.header, footer: !!currentLayout.footer }
-      : { header: true, footer: true };
+      ? {
+          header: !!currentLayout.header,
+          footer: !!currentLayout.footer,
+          navLeft: !!currentLayout.navLeft,
+        }
+      : { header: true, footer: true, navLeft: true };
 
     if (!compareTwoObject(layoutUpdated, layout)) {
       setTimeout(() => dispatch(setDisplayLayout(layoutUpdated)));
@@ -22,7 +28,12 @@ const Main = () => {
   };
 
   return (
-    <div id="main" className="container">
+    <div
+      id="main"
+      style={{
+        marginTop: isAuthenticated && layout.header && HEADER_H,
+      }}
+    >
       <Switch>
         {routes.map(
           ({ component: Component, path, layout: currentLayout, ...rest }) => {

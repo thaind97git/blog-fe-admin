@@ -83,8 +83,7 @@ module.exports = {
               lessOptions: {
                 // If you are using less-loader@5 please spread the lessOptions to options directly
                 modifyVars: {
-                  'primary-color': '#1DA57A',
-                  'link-color': '#1DA57A',
+                  'primary-color': '#193549',
                 },
                 javascriptEnabled: true,
               },

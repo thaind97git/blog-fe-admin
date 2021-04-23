@@ -68,7 +68,7 @@ const getStyleLoaders = (cssOptions = {}, preProcessor) => {
       {
         loader: require.resolve(preProcessor),
         options: {
-          sourceMap: true,
+          sourceMap: isEnvProduction,
         },
       },
     );

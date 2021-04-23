@@ -4,6 +4,7 @@ const initialState = {
   loading: false,
   header: true,
   footer: true,
+  navLeft: true,
 };
 
 const reducer = (state = initialState, action) => {

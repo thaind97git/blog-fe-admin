@@ -14,10 +14,12 @@ export const verifyToken = () => async dispatch => {
     dispatch(setCurrentUser(null));
     dispatch(setLoading(true));
     dispatch(setIsAuthenticated(false));
+
     response = await getCurrentUser();
+
     dispatch(setLoading(false));
     if (response && response.data) {
-      dispatch(setCurrentUser(response.data));
+      dispatch(setCurrentUser(response.data.user));
       dispatch(setIsAuthenticated(true));
     }
   } catch (error) {

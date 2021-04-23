@@ -1,4 +1,5 @@
 import { lazy } from 'react';
+import withAuth from '@/components/HOC/withAuth';
 
 const Home = lazy(() => import('./index'));
 
@@ -10,7 +11,8 @@ export default [
     layout: {
       header: true,
       footer: true,
+      navLeft: true,
     },
-    component: Home,
+    component: withAuth(Home),
   },
 ];
