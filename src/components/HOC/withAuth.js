@@ -1,7 +1,8 @@
-import { verifyToken } from '@/store/actions/auth';
-import { getCurrentUser } from '@/store/selectors/auth';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+
+import { verifyToken } from '@/store/actions/auth';
+import { getCurrentUser } from '@/store/selectors/auth';
 
 const Empty = () => <div />;
 

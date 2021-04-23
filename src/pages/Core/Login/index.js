@@ -1,13 +1,45 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { Button, Form } from 'antd';
+
+import { login } from '@/apis/auth';
+import { setLoading } from '@/store/actions';
+
+import Input from '@/components/Input';
+import FormItem from '@/components/Form/FormItem';
+
+import { saveToken } from '@/helpers/local-storage';
+import { errorHandler } from '@/helpers/axios';
 
 const Login = () => {
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+  const onSubmit = async values => {
+    if (!values?.email || !values?.password) {
+      return;
+    }
+
+    try {
+      dispatch(setLoading(true));
+      const response = await login({ ...values });
+      response.data && saveToken(response.data?.tokens?.access?.token);
+      history.push('/');
+    } catch (error) {
+      errorHandler(error);
+    }
+
+    dispatch(setLoading(false));
+  };
+
   return (
     <div id="login" className="login">
-      <h1 className="login__challenge-title">React-template</h1>
+      <h1 className="login__challenge-title">Alden-admin</h1>
       <h2 className="login__challenge-subtitle">#thaind97</h2>
       <p className="login__challenge-part-of">
         <a
-          href="https://github.com/thaind97git/react-template"
+          href="https://github.com/thaind97git/blog-fe-admin"
           target="_blank"
           rel="noreferrer"
         >
@@ -24,52 +56,28 @@ const Login = () => {
         </div>
         <div className="login-form-container">
           <h3 className="login-title">Sign in to your account</h3>
-          <form>
-            <div className="form-control">
-              <label htmlFor="email">Email</label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                autoComplete="off"
-                required
-              />
-            </div>
-            <div className="form-control">
-              <label htmlFor="password">Password</label>
-              <input id="password" name="password" type="password" required />
-            </div>
-            <div className="form-control">
-              <div className="form-remember">
-                <input id="remember" name="remember" type="checkbox" />{' '}
-                <label htmlFor="remember">Remember me</label>
-              </div>
-              <div className="form-forgot">
-                <a href="#">Forgot your password?</a>
-              </div>
-            </div>
-            <div className="form-control">
-              <button className="btn btn-full">Sign in</button>
-            </div>
-          </form>
-          {/* <div className="divider">or continue with</div>
-          <ul className="social-list">
-            <li>
-              <button className="btn btn-default">
-                <i className="fab fa-facebook-f"></i>
-              </button>
-            </li>
-            <li>
-              <button className="btn btn-default">
-                <i className="fab fa-twitter"></i>
-              </button>
-            </li>
-            <li>
-              <button className="btn btn-default">
-                <i className="fab fa-github"></i>
-              </button>
-            </li>
-          </ul> */}
+          <Form
+            name="basic"
+            initialValues={{ remember: true }}
+            onFinish={onSubmit}
+          >
+            <FormItem name="email" rulesName={['required', 'email']}>
+              <Input label="Email" />
+            </FormItem>
+            <FormItem name="password" rulesName={['required']}>
+              <Input type="password" label="Password" />
+            </FormItem>
+            <FormItem className="form-control">
+              <Button
+                size="large"
+                className="login__btn-submit"
+                type="primary"
+                htmlType="submit"
+              >
+                Submit
+              </Button>
+            </FormItem>
+          </Form>
         </div>
       </div>
     </div>
