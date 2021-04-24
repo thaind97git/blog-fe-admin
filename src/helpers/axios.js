@@ -1,6 +1,9 @@
 import { toastError } from './toast';
 
 const apiErrorMessage = error => {
+  if (typeof error === 'string') {
+    return error;
+  }
   const response = error && error.response;
   const isArrayBuffer =
     response?.request?.responseType === 'arraybuffer' &&

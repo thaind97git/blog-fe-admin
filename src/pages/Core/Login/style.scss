@@ -1,12 +1,8 @@
 // colors
 // 355070, 6d597a, b56576, e56b6f, eaac8b
-$text-colorBg: #2f363d;
+$text-colorBg: #8d9296;
 $dark: #c9d1d9;
-$darkBg: #0d1117;
-
-html {
-  font-size: 16px;
-}
+$darkBg: #c7c7c7;
 
 .login {
   display: flex;
@@ -16,7 +12,7 @@ html {
   flex-direction: column;
   min-height: 100vh;
   position: relative;
-  background-color: lighten($text-color, 15%);
+  background-color: $primary-color;
   background-image: url('/public/static/image/icon/bg.svg');
   background-repeat: no-repeat;
   background-size: cover;
@@ -56,11 +52,11 @@ html {
     border: 1px solid rgba(255, 255, 255, 0.18);
     a,
     a:visited {
-      color: $darkBg;
+      color: black;
       text-decoration-style: wavy;
       &:hover,
       &:active {
-        color: lighten($darkBg, 10%);
+        color: lighten($darkBg, 80%);
       }
     }
   }
@@ -73,21 +69,21 @@ html {
     align-items: stretch;
     border-radius: 0.5rem;
     overflow: hidden;
-    box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px,
-      rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
+    // box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px,
+    //   rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
     border: 1px solid rgba(255, 255, 255, 0.18);
   }
 
-  .login-glass {
+  &__glass {
     flex: 0 0 40%;
     background-color: rgba(255, 255, 255, 0.35);
     backdrop-filter: blur(5px);
     display: flex;
     align-items: center;
     justify-content: center;
-    svg {
+    &__logo {
       width: 30%;
-      fill: $primary-color;
+      fill: black;
     }
   }
 

@@ -1,52 +1,58 @@
 import {
-  AppstoreOutlined,
-  BarChartOutlined,
-  CloudOutlined,
-  ShopOutlined,
+  TagsOutlined,
+  ProfileOutlined,
   TeamOutlined,
-  UserOutlined,
   UploadOutlined,
   VideoCameraOutlined,
+  DashboardFilled,
+  FormOutlined,
+  CommentOutlined,
 } from '@ant-design/icons';
 
 export const NAV_LEFT = [
   {
-    key: '1',
-    label: 'Nav 1',
-    icon: UserOutlined,
+    key: 'dashboard',
+    label: 'Dashboard',
+    icon: DashboardFilled,
     path: '/',
+  },
+  {
+    key: 'blog-post',
+    label: 'Blog Post',
+    icon: FormOutlined,
+    path: '/posts',
     children: [
       {
-        key: '1.0',
-        label: 'Nav 1.1',
-        icon: UserOutlined,
+        key: '2.0',
+        label: 'Nav 2.0',
+        icon: FormOutlined,
+        path: '/',
+      },
+      {
+        key: '2.1',
+        label: 'Nav 2.1',
+        icon: FormOutlined,
         path: '/children',
       },
     ],
   },
   {
-    key: '2',
-    label: 'Nav 2',
-    icon: AppstoreOutlined,
-    path: '/todo',
+    key: 'social',
+    label: 'Social',
+    icon: CommentOutlined,
+    path: '/socials',
   },
   {
-    key: '3',
-    label: 'Nav 3',
-    icon: BarChartOutlined,
-    path: '/3',
+    key: 'tag',
+    label: 'Tag',
+    icon: TagsOutlined,
+    path: '/tags',
   },
   {
-    key: '4',
-    label: 'Nav 4',
-    icon: CloudOutlined,
-    path: '/user',
-  },
-  {
-    key: '5',
-    label: 'Nav 5',
-    icon: ShopOutlined,
-    path: '/',
+    key: 'profile',
+    label: 'Profile',
+    icon: ProfileOutlined,
+    path: '/profile',
   },
   {
     key: '6',
@@ -67,3 +73,47 @@ export const NAV_LEFT = [
     path: '/',
   },
 ];
+
+export const MENU_KEYS = NAV_LEFT.map(nav => nav.key);
+
+const findMenuByPath = (path, menuItem = []) =>
+  menuItem.find(item => item.path === path);
+
+const findSubMenuByPath = (path, subItemArray = []) =>
+  subItemArray.find(item => item.path === path);
+
+export const getOpenKeys = () => {
+  const path = window.location.pathname;
+  let openKeysSelected;
+  const subMenu = findMenuByPath(path, NAV_LEFT);
+  if (subMenu !== undefined) {
+    openKeysSelected = subMenu.key;
+  } else {
+    for (const item of NAV_LEFT) {
+      const subItem = findSubMenuByPath(path, item.children);
+      if (subItem !== undefined) {
+        openKeysSelected = item.key;
+      }
+    }
+  }
+  return [openKeysSelected];
+};
+
+export const getDefaultKeys = () => {
+  let openDefaultKeys;
+  const path = window.location.pathname;
+
+  const subMenu = findMenuByPath(path, NAV_LEFT);
+  if (subMenu !== undefined) {
+    openDefaultKeys = subMenu.key;
+  }
+  if (subMenu === undefined) {
+    for (const item of NAV_LEFT) {
+      const subItem = findSubMenuByPath(path, item.children);
+      if (subItem !== undefined) {
+        openDefaultKeys = subItem.subKey;
+      }
+    }
+  }
+  return [openDefaultKeys];
+};

@@ -46,7 +46,10 @@ const AppLayout = () => {
             collapsed={collapsed}
           />
           <Main isAuthenticated={isAuthenticated} />
-          <Footer display={isAuthenticated && layout.footer} />
+          <Footer
+            display={isAuthenticated && layout.footer}
+            collapsed={collapsed}
+          />
         </Layout>
       </Layout>
     </div>

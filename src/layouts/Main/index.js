@@ -7,7 +7,7 @@ import { useShallowEqualSelector } from '@/hooks/useShallowEqualSelector';
 import { getDisplayLayout } from '@/store/selectors/layout';
 import { setDisplayLayout } from '@/store/actions/layout';
 import { compareTwoObject } from '@/utils';
-import { HEADER_H } from '../constants';
+import { FOOTER_H, HEADER_H } from '../constants';
 
 const Main = ({ isAuthenticated }) => {
   const layout = useShallowEqualSelector(getDisplayLayout);
@@ -16,10 +16,10 @@ const Main = ({ isAuthenticated }) => {
   const updateDisplayLayout = (currentLayout, layout) => {
     const layoutUpdated = currentLayout
       ? {
-          header: !!currentLayout.header,
-          footer: !!currentLayout.footer,
-          navLeft: !!currentLayout.navLeft,
-        }
+        header: !!currentLayout.header,
+        footer: !!currentLayout.footer,
+        navLeft: !!currentLayout.navLeft,
+      }
       : { header: true, footer: true, navLeft: true };
 
     if (!compareTwoObject(layoutUpdated, layout)) {
@@ -31,7 +31,11 @@ const Main = ({ isAuthenticated }) => {
     <div
       id="main"
       style={{
-        marginTop: isAuthenticated && layout.header && HEADER_H,
+        marginTop: isAuthenticated && layout.header && HEADER_H + 24,
+        marginBottom: isAuthenticated && layout.footer && FOOTER_H + 24,
+        marginLeft: isAuthenticated && 24,
+        marginRight: isAuthenticated && 24,
+        padding: isAuthenticated && 24,
       }}
     >
       <Switch>

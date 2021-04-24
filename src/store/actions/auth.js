@@ -1,9 +1,10 @@
 import { getCurrentUser } from '@/apis/auth';
 import { setLoading } from './';
-import { history } from '@/store';
-import { getToken } from '@/helpers/local-storage';
+import store, { history } from '@/store';
+import { getToken, removeToken } from '@/helpers/local-storage';
 export const SET_AUTHENTICATED = 'SET_AUTHENTICATED';
 export const SET_CURRENT_USER = 'SET_CURRENT_USER';
+export const LOG_OUT = 'LOG_OUT';
 
 export const verifyToken = () => async dispatch => {
   let response;
@@ -37,3 +38,12 @@ export const setCurrentUser = currentUser => ({
   type: SET_CURRENT_USER,
   payload: currentUser,
 });
+
+export const logout = () => {
+  removeToken();
+  history.push('/login');
+  store.dispatch(setIsAuthenticated(false));
+  return {
+    type: LOG_OUT,
+  };
+};

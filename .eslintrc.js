@@ -32,7 +32,7 @@ module.exports = {
     // semi: [2, 'always'],
     camelcase: 'warn',
     indent: [
-      'off',
+      'warn',
       2,
       {
         SwitchCase: 1,

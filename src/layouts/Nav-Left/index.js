@@ -2,17 +2,17 @@ import React, { Fragment, useState } from 'react';
 import { Layout, Menu } from 'antd';
 import { Link } from 'react-router-dom';
 import { MailOutlined } from '@ant-design/icons';
-import { NAV_LEFT } from '../constants/nav-left';
+import { getOpenKeys, MENU_KEYS, NAV_LEFT } from '../constants/nav-left';
+
 const { Sider } = Layout;
 const { SubMenu } = Menu;
-const rootSubmenuKeys = ['1', '2', '3'];
 
 const NavLeft = ({ collapsed, setCollapsed, display }) => {
-  const [openKeys, setOpenKeys] = useState(['1']);
+  const [openKeys, setOpenKeys] = useState(getOpenKeys());
 
   const onOpenChange = keys => {
     const latestOpenKey = keys.find(key => openKeys.indexOf(key) === -1);
-    if (rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
+    if (MENU_KEYS.indexOf(latestOpenKey) === -1) {
       setOpenKeys(keys);
     } else {
       setOpenKeys(latestOpenKey ? [latestOpenKey] : []);
@@ -41,7 +41,7 @@ const NavLeft = ({ collapsed, setCollapsed, display }) => {
         mode="inline"
         openKeys={openKeys}
         onOpenChange={onOpenChange}
-        defaultSelectedKeys={['1']}
+        defaultSelectedKeys={['dashboard']}
       >
         {NAV_LEFT.map(({ key, label, icon: Icon, path = '/', children }) => {
           return (

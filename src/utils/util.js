@@ -13,8 +13,12 @@ const getHeaders = (options = {}) =>
     },
     options,
   );
+
+const functionCaller = func => typeof func === 'function' && func();
+
 export default {
   sleep,
   getResetter,
   getHeaders,
+  functionCaller,
 };
