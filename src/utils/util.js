@@ -14,7 +14,8 @@ const getHeaders = (options = {}) =>
     options,
   );
 
-const functionCaller = func => typeof func === 'function' && func();
+const functionCaller = (func, ...params) =>
+  typeof func === 'function' && func(...params);
 
 export default {
   sleep,

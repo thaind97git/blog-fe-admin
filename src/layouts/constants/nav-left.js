@@ -1,9 +1,7 @@
 import {
   TagsOutlined,
   ProfileOutlined,
-  TeamOutlined,
-  UploadOutlined,
-  VideoCameraOutlined,
+  SolutionOutlined,
   DashboardFilled,
   FormOutlined,
   CommentOutlined,
@@ -55,22 +53,10 @@ export const NAV_LEFT = [
     path: '/profile',
   },
   {
-    key: '6',
-    label: 'Nav 6',
-    icon: TeamOutlined,
-    path: '/',
-  },
-  {
-    key: '7',
-    label: 'Nav 7',
-    icon: UploadOutlined,
-    path: '/',
-  },
-  {
-    key: '8',
-    label: 'Nav 8',
-    icon: VideoCameraOutlined,
-    path: '/',
+    key: 'resume',
+    label: 'Resume',
+    icon: SolutionOutlined,
+    path: '/resumes',
   },
 ];
 
