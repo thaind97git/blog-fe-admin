@@ -10,3 +10,9 @@ export const getResumeById = ({ id }, config = {}) =>
 
 export const updateResume = (id, data) =>
   HttpRequest.patch(`/resumes/${id}`, data);
+
+export const swapPosition = (_, data) =>
+  HttpRequest.put('/resumes/swap-position', data);
+
+export const swapSubPosition = (_, data) =>
+  HttpRequest.put('/resumes/swap-sub-position', data);

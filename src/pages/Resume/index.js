@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Button, Modal, Skeleton, Space } from 'antd';
 
-import { getResumes } from '@/apis/resume';
+import { getResumes, swapPosition } from '@/apis/resume';
 
 import useGetRequest from '@/hooks/useGetRequest';
 import EmptyRecord from '@/components/Empty-Record';
@@ -11,11 +11,27 @@ import ResumeCreate from './components/Create';
 
 import { compareTwoObject } from '@/utils';
 import { listResumeMapper } from '@/helpers/mapper';
+import { useDispatch } from 'react-redux';
+import { setLoading } from '@/store/actions';
+import { errorHandler } from '@/helpers/axios';
+
+const getFromTo = (oldItems = [], newItems = []) => {
+  const result = [];
+  for (let i = 0; i < newItems.length; i++) {
+    const element = newItems[i];
+    if (!compareTwoObject(oldItems[i], element)) {
+      result.push(element);
+    }
+  }
+  return result;
+};
 
 const Resumes = () => {
+  const dispatch = useDispatch();
+
   const [refreshResumes, setRefreshResume] = useState(false);
   const [openCreate, setOpenCreate] = useState(false);
-  const [isEqual, setIsEqual] = useState(true);
+  const [positionSwap, setPositionSwap] = useState({});
 
   const { data: resumes, fetching: fetchingResumes } = useGetRequest({
     promiseFunction: getResumes,
@@ -23,6 +39,28 @@ const Resumes = () => {
   });
 
   const closeCreateModal = () => setOpenCreate(false);
+
+  const swapSection = useCallback(async () => {
+    try {
+      dispatch(setLoading(true));
+      const { from, to } = positionSwap;
+      await swapPosition(null, {
+        from: from,
+        to: to,
+      });
+    } catch (error) {
+      errorHandler(error);
+    }
+    setPositionSwap({});
+    setRefreshResume(prev => !prev);
+    dispatch(setLoading(false));
+  }, [positionSwap, dispatch]);
+
+  useEffect(() => {
+    if (positionSwap.from && positionSwap.to) {
+      swapSection();
+    }
+  }, [positionSwap, swapSection]);
 
   if (fetchingResumes) {
     return <Skeleton />;
@@ -33,9 +71,6 @@ const Resumes = () => {
       title="Resume management"
       actions={
         <Space>
-          <Button disabled={isEqual} type="primary" onClick={() => {}}>
-            Update Position
-          </Button>
           <Button type="primary" onClick={() => setOpenCreate(true)}>
             Create new section
           </Button>
@@ -72,8 +107,11 @@ const Resumes = () => {
         <div>
           <ListOfResume
             onDropEnd={newItems => {
-              const isEqual = compareTwoObject(newItems, resumesResult);
-              setIsEqual(isEqual);
+              const twoPositions = getFromTo(resumesResult, newItems);
+              setPositionSwap({
+                from: twoPositions[0]?.id,
+                to: twoPositions[1]?.id,
+              });
             }}
             resumes={resumesResult}
             onSuccessEdit={() => setRefreshResume(prev => !prev)}

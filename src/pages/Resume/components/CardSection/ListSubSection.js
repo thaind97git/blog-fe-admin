@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Divider, Row } from 'antd';
+import { Row } from 'antd';
 import { DragOutlined } from '@ant-design/icons';
 import {
   sortableContainer,
@@ -7,30 +7,29 @@ import {
   SortableHandle,
 } from 'react-sortable-hoc';
 
-import CardSection from '../CardSection';
-
 import { arrayMove, functionCaller } from '@/utils';
+import { NormalContent } from './RightContent';
 
 const DragHandle = SortableHandle(() => (
   <Row justify="end">
     <DragOutlined className="drag-icon" />
   </Row>
 ));
+
 const SortableItem = sortableElement(({ value }) => (
-  <li className="list-of-resume--ul--li">
-    <DragHandle />
-    {value}
+  <li className="list-of-sub-section--ul--li">
+    <DragHandle /> {value}
   </li>
 ));
 
 const SortableContainer = sortableContainer(({ children }) => {
-  return <ul className="list-of-resume--ul">{children}</ul>;
+  return <ul className="list-of-sub-section--ul">{children}</ul>;
 });
 
-const ListOfResume = ({ resumes = [], onSuccessEdit, onDropEnd }) => {
-  const [items, setItems] = useState(resumes);
+const ListOfSubSection = ({ subSections = [], onDropEnd }) => {
+  const [items, setItems] = useState(subSections);
 
-  if (!resumes?.length) {
+  if (!subSections?.length) {
     return null;
   }
 
@@ -41,18 +40,13 @@ const ListOfResume = ({ resumes = [], onSuccessEdit, onDropEnd }) => {
   };
 
   return (
-    <div className="list-of-resume">
+    <div className="list-of-sub-section">
       <SortableContainer distance={1} onSortEnd={onSortEnd} useDragHandle>
         {items.map((resume, index) => (
           <SortableItem
             key={`item-${resume.id}`}
             index={index}
-            value={
-              <>
-                <CardSection resume={resume} onSuccessEdit={onSuccessEdit} />
-                <Divider />
-              </>
-            }
+            value={<NormalContent resume={resume} />}
           />
         ))}
       </SortableContainer>
@@ -60,4 +54,4 @@ const ListOfResume = ({ resumes = [], onSuccessEdit, onDropEnd }) => {
   );
 };
 
-export default ListOfResume;
+export default ListOfSubSection;

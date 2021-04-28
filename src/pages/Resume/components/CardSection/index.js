@@ -115,7 +115,7 @@ const CardSection = ({ resume: resumeProp, onSuccessEdit }) => {
           <section className="resume--section">
             <div className="resume--section--left">{resume.sectionTitle}</div>
             <div className="resume--section--right">
-              <RightContent resume={resume} />
+              <RightContent resume={resume} onSuccessEdit={onSuccessEdit} />
             </div>
           </section>
         </div>

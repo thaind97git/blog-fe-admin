@@ -1,9 +1,14 @@
 import { htmlDecode } from '@/helpers/html';
-import React, { Fragment } from 'react';
+import React, { Fragment, useCallback, useEffect, useState } from 'react';
 
-import { ensureArray } from '@/utils';
+import { ensureArray, functionCaller, compareTwoObject } from '@/utils';
+import ListOfSubSection from './ListSubSection';
+import { useDispatch } from 'react-redux';
+import { setLoading } from '@/store/actions';
+import { errorHandler } from '@/helpers/axios';
+import { swapSubPosition } from '@/apis/resume';
 
-const Content = ({ resume }) => {
+export const NormalContent = ({ resume }) => {
   if (!resume) {
     return null;
   }
@@ -29,7 +34,7 @@ const Content = ({ resume }) => {
   );
 };
 
-const Skills = ({ resume }) => {
+const NormalSkill = ({ resume }) => {
   return (
     <ul>
       {ensureArray(resume.skills).map(skill => (
@@ -39,27 +44,67 @@ const Skills = ({ resume }) => {
   );
 };
 
-const RightContent = ({ resume }) => {
+const getFromTo = (oldItems = [], newItems = []) => {
+  const result = [];
+  for (let i = 0; i < newItems.length; i++) {
+    const element = newItems[i];
+    if (!compareTwoObject(oldItems[i], element)) {
+      result.push(element);
+    }
+  }
+  return result;
+};
+
+const RightContent = ({ resume, onSuccessEdit }) => {
+  const [positionSwap, setPositionSwap] = useState({});
+
+  const dispatch = useDispatch();
+
+  const swapSubSection = useCallback(async () => {
+    try {
+      dispatch(setLoading(true));
+      const { from, to } = positionSwap;
+      await swapSubPosition(null, {
+        from: from,
+        to: to,
+      });
+    } catch (error) {
+      errorHandler(error);
+    }
+    setPositionSwap({});
+    functionCaller(onSuccessEdit);
+    dispatch(setLoading(false));
+  }, [positionSwap, dispatch, onSuccessEdit]);
+
+  useEffect(() => {
+    if (positionSwap.from && positionSwap.to) {
+      swapSubSection();
+    }
+  }, [positionSwap, swapSubSection]);
+
   if (!resume) {
     return null;
   }
+  const subSections = ensureArray(resume.subSections);
+
   return (
     <>
       <hr />
       {ensureArray(resume.skills).length ? (
-        <Skills resume={resume} />
+        <NormalSkill resume={resume} />
       ) : (
-        <Content resume={resume} />
+        <NormalContent resume={resume} />
       )}
-      {ensureArray(resume.subSections).map(resume => (
-        <Fragment key={resume.id}>
-          {ensureArray(resume.skills).length ? (
-            <Skills resume={resume} />
-          ) : (
-            <Content resume={resume} />
-          )}
-        </Fragment>
-      ))}
+      <ListOfSubSection
+        onDropEnd={newItems => {
+          const twoPositions = getFromTo(subSections, newItems);
+          setPositionSwap({
+            from: twoPositions[0]?.id,
+            to: twoPositions[1]?.id,
+          });
+        }}
+        subSections={subSections.sort((x, y) => x.subPosition - y.subPosition)}
+      />
     </>
   );
 };
