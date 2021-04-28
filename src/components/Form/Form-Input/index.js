@@ -1,7 +1,7 @@
 import React from 'react';
 import { Input as AntInput } from 'antd';
 
-const FormInput = ({ label, size = 'middle', className, ...rest }) => {
+const Input = ({ label, size = 'middle', className, ...rest }) => {
   const labelClasses = ['form-control--label', size].filter(Boolean).join(' ');
 
   const titleClasses = ['form-control--title', size, className]
@@ -16,4 +16,4 @@ const FormInput = ({ label, size = 'middle', className, ...rest }) => {
   );
 };
 
-export default FormInput;
+export default Input;

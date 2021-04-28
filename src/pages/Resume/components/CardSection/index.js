@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { Fragment, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Card } from 'antd';
 import {
   EditOutlined,
@@ -7,12 +8,15 @@ import {
   CloseOutlined,
   SaveFilled,
 } from '@ant-design/icons';
-import ResumeEdit from './Edit';
-import { errorHandler } from '@/helpers/axios';
-import { useDispatch } from 'react-redux';
+
 import { setLoading } from '@/store/actions';
 import { updateResume } from '@/apis/resume';
+
+import ResumeEdit from '../Edit';
+
+import { errorHandler } from '@/helpers/axios';
 import { functionCaller } from '@/utils';
+import RightContent from './RightContent';
 
 const CardSection = ({ resume: resumeProp, onSuccessEdit }) => {
   const [edit, setEdit] = useState(false);
@@ -88,17 +92,33 @@ const CardSection = ({ resume: resumeProp, onSuccessEdit }) => {
               </div>,
             ]
       }
-      title={resume.title}
     >
       {edit ? (
-        <ResumeEdit
-          onChange={(markdown, html) => {
-            setResume(prev => ({ ...prev, markdown, html }));
-          }}
-          resume={resume}
-        />
+        resume?.skills ? (
+          <ResumeEdit
+            onCallbackSuccess={() => {
+              setEdit(false);
+              functionCaller(onSuccessEdit);
+            }}
+            resume={resume}
+          />
+        ) : (
+          <ResumeEdit
+            onChange={(markdown, html) => {
+              setResume(prev => ({ ...prev, markdown, html }));
+            }}
+            resume={resume}
+          />
+        )
       ) : (
-        <div dangerouslySetInnerHTML={{ __html: resume.html }}></div>
+        <div className="resume">
+          <section className="resume--section">
+            <div className="resume--section--left">{resume.sectionTitle}</div>
+            <div className="resume--section--right">
+              <RightContent resume={resume} />
+            </div>
+          </section>
+        </div>
       )}
     </Card>
   );

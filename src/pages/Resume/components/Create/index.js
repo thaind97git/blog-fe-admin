@@ -7,8 +7,10 @@ import { createResume } from '@/apis/resume';
 import { setLoading } from '@/store/actions';
 
 import FormItem from '@/components/Form/FormItem';
-import Input from '@/components/Input';
+import FormInput from '@/components/Form/Form-Input';
+import FormSelect from '@/components/Form/Form-Select';
 import Markdown from '@/components/Markdown';
+import SkillEdit from './SkillEdit';
 
 import { errorHandler } from '@/helpers/axios';
 import { toastSuccess } from '@/helpers/toast';
@@ -23,18 +25,28 @@ const optionsSectionTitle = [
   { label: 'Section Title', value: false },
   { label: 'No Section', value: true },
 ];
-const ResumeCreate = ({ onCallbackSuccess, onCallbackError }) => {
+const ResumeCreate = ({
+  onCallbackSuccess,
+  onCallbackError,
+  sections = [],
+}) => {
   const dispatch = useDispatch();
 
+  const [createSkillForm] = Form.useForm();
   const [isSkill, setIsSkill] = useState(false);
   const [noSection, setNoSection] = useState(false);
+  const [skills, setSkills] = useState([]);
 
   const onSubmit = async values => {
     if (!values) {
       return;
     }
 
-    values.html = marked(values.markdown);
+    if (isSkill) {
+      values.skills = skills;
+    } else {
+      values.html = marked(values.markdown);
+    }
 
     try {
       dispatch(setLoading(true));
@@ -48,6 +60,7 @@ const ResumeCreate = ({ onCallbackSuccess, onCallbackError }) => {
       dispatch(setLoading(false));
     }
   };
+
   return (
     <>
       <Row justify="center" gutter={12}>
@@ -74,34 +87,54 @@ const ResumeCreate = ({ onCallbackSuccess, onCallbackError }) => {
         name="create-resume"
         initialValues={{ markdown: '', skills: '' }}
         onFinish={onSubmit}
+        form={createSkillForm}
       >
-        <FormItem name="sessionTitle" rulesName={['required']}>
-          <Input
-            placeholder="Education, Employment History, Technical Skills, ..."
-            label="Section Title"
-          />
-        </FormItem>
-        <FormItem name="title" rulesName={['required']}>
-          <Input
-            placeholder="Software Engineer, Web Developer, ..."
-            label="Title"
-          />
-        </FormItem>
-        <FormItem name="subTitle" rulesName={['required']}>
-          <Input
-            placeholder="FPT University - Ho Chi Minh City, Binh Thanh District"
-            label="Sub Title"
-          />
-        </FormItem>
-        <FormItem name="dateRange" rulesName={['required']}>
-          <Input placeholder="05/2019 - Present" label="Date Range" />
-        </FormItem>
-        {isSkill ? (
-          <FormItem name="skills" rulesName={['required']}>
-            <Markdown />
+        {noSection ? (
+          <FormItem name="sectionId" rulesName={['required']}>
+            <FormSelect
+              options={sections.map(section => ({
+                value: section.id,
+                label: section.sectionTitle,
+              }))}
+              label="Select Section"
+            />
           </FormItem>
         ) : (
-          <FormItem name="markdown" rulesName={['required']}>
+          <FormItem name="sectionTitle" rulesName={['required']}>
+            <FormInput
+              placeholder="Education, Employment History, Technical Skills, ..."
+              label="Section Title"
+            />
+          </FormItem>
+        )}
+        {!isSkill && (
+          <>
+            <FormItem name="title">
+              <FormInput
+                placeholder="Software Engineer, Web Developer, ..."
+                label="Title"
+              />
+            </FormItem>
+            <FormItem name="subTitle">
+              <FormInput
+                placeholder="FPT University - Ho Chi Minh City, Binh Thanh District"
+                label="Sub Title"
+              />
+            </FormItem>
+            <FormItem name="dateRange">
+              <FormInput placeholder="05/2019 - Present" label="Date Range" />
+            </FormItem>
+          </>
+        )}
+        {isSkill ? (
+          <SkillEdit
+            formRef={createSkillForm}
+            display={isSkill}
+            skills={skills}
+            setSkills={setSkills}
+          />
+        ) : (
+          <FormItem name="markdown">
             <Markdown />
           </FormItem>
         )}
