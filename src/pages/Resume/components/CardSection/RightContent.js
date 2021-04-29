@@ -1,20 +1,47 @@
-import { htmlDecode } from '@/helpers/html';
 import React, { Fragment, useCallback, useEffect, useState } from 'react';
-
-import { ensureArray, functionCaller, compareTwoObject } from '@/utils';
-import ListOfSubSection from './ListSubSection';
 import { useDispatch } from 'react-redux';
+import { Button } from 'antd';
+import { EditOutlined } from '@ant-design/icons';
+
 import { setLoading } from '@/store/actions';
-import { errorHandler } from '@/helpers/axios';
 import { swapSubPosition } from '@/apis/resume';
 
-export const NormalContent = ({ resume }) => {
+import ListOfSubSection from './ListSubSection';
+
+import { htmlDecode } from '@/helpers/html';
+import { errorHandler } from '@/helpers/axios';
+import { ensureArray, functionCaller, compareTwoObject } from '@/utils';
+
+const EditButton = ({ onClick }) => {
+  return (
+    <Button
+      style={{ width: 'fit-content' }}
+      size="small"
+      icon={<EditOutlined />}
+      onClick={() => {
+        functionCaller(onClick);
+      }}
+    >
+      Edit
+    </Button>
+  );
+};
+
+export const NormalContent = ({ resume, setEdit, setCurrentResume }) => {
   if (!resume) {
     return null;
   }
 
   return (
     <>
+      {!resume?.subSections ? (
+        <EditButton
+          onClick={() => {
+            setEdit(true);
+            setCurrentResume(resume);
+          }}
+        />
+      ) : null}
       {resume.title ? (
         <h2 className="resume--section--right--title">{resume.title}</h2>
       ) : null}
@@ -34,13 +61,21 @@ export const NormalContent = ({ resume }) => {
   );
 };
 
-const NormalSkill = ({ resume }) => {
+const NormalSkill = ({ resume, setEdit, setCurrentResume }) => {
   return (
-    <ul>
-      {ensureArray(resume.skills).map(skill => (
-        <li key={skill}> {skill}</li>
-      ))}
-    </ul>
+    <>
+      <EditButton
+        onClick={() => {
+          setEdit(true);
+          setCurrentResume(resume);
+        }}
+      />
+      <ul>
+        {ensureArray(resume.skills).map(skill => (
+          <li key={skill}> {skill}</li>
+        ))}
+      </ul>
+    </>
   );
 };
 
@@ -55,7 +90,7 @@ const getFromTo = (oldItems = [], newItems = []) => {
   return result;
 };
 
-const RightContent = ({ resume, onSuccessEdit }) => {
+const RightContent = ({ resume, onSuccessEdit, setEdit, setCurrentResume }) => {
   const [positionSwap, setPositionSwap] = useState({});
 
   const dispatch = useDispatch();
@@ -91,11 +126,21 @@ const RightContent = ({ resume, onSuccessEdit }) => {
     <>
       <hr />
       {ensureArray(resume.skills).length ? (
-        <NormalSkill resume={resume} />
+        <NormalSkill
+          setEdit={setEdit}
+          setCurrentResume={setCurrentResume}
+          resume={resume}
+        />
       ) : (
-        <NormalContent resume={resume} />
+        <NormalContent
+          setCurrentResume={setCurrentResume}
+          setEdit={setEdit}
+          resume={resume}
+        />
       )}
       <ListOfSubSection
+        setCurrentResume={setCurrentResume}
+        setEdit={setEdit}
         onDropEnd={newItems => {
           const twoPositions = getFromTo(subSections, newItems);
           setPositionSwap({

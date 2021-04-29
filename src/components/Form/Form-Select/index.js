@@ -11,7 +11,6 @@ const FormSelect = ({
   options = [],
   ...rest
 }) => {
-  console.log({ options });
   if (options.length === 0) {
     return null;
   }

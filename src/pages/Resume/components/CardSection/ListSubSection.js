@@ -26,7 +26,12 @@ const SortableContainer = sortableContainer(({ children }) => {
   return <ul className="list-of-sub-section--ul">{children}</ul>;
 });
 
-const ListOfSubSection = ({ subSections = [], onDropEnd }) => {
+const ListOfSubSection = ({
+  subSections = [],
+  onDropEnd,
+  setEdit,
+  setCurrentResume,
+}) => {
   const [items, setItems] = useState(subSections);
 
   if (!subSections?.length) {
@@ -46,7 +51,13 @@ const ListOfSubSection = ({ subSections = [], onDropEnd }) => {
           <SortableItem
             key={`item-${resume.id}`}
             index={index}
-            value={<NormalContent resume={resume} />}
+            value={
+              <NormalContent
+                setCurrentResume={setCurrentResume}
+                setEdit={setEdit}
+                resume={resume}
+              />
+            }
           />
         ))}
       </SortableContainer>

@@ -96,7 +96,7 @@ const ResumeEdit = ({
         form={updateSkillForm}
       >
         {noSection ? (
-          <FormItem name="sectionId" rulesName={['required']}>
+          <FormItem name="sectionId">
             <FormSelect
               options={sections.map(section => ({
                 value: section.id,
@@ -106,7 +106,7 @@ const ResumeEdit = ({
             />
           </FormItem>
         ) : (
-          <FormItem name="sectionTitle" rulesName={['required']}>
+          <FormItem name="sectionTitle">
             <FormInput
               placeholder="Education, Employment History, Technical Skills, ..."
               label="Section Title"
