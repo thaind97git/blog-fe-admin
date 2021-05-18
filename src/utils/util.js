@@ -17,9 +17,12 @@ const getHeaders = (options = {}) =>
 const functionCaller = (func, ...params) =>
   typeof func === 'function' && func(...params);
 
+const isBrowser = typeof window !== 'undefined';
+
 export default {
   sleep,
   getResetter,
   getHeaders,
   functionCaller,
+  isBrowser,
 };

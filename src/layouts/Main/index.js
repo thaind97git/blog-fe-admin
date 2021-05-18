@@ -16,10 +16,10 @@ const Main = ({ isAuthenticated }) => {
   const updateDisplayLayout = (currentLayout, layout) => {
     const layoutUpdated = currentLayout
       ? {
-        header: !!currentLayout.header,
-        footer: !!currentLayout.footer,
-        navLeft: !!currentLayout.navLeft,
-      }
+          header: !!currentLayout.header,
+          footer: !!currentLayout.footer,
+          navLeft: !!currentLayout.navLeft,
+        }
       : { header: true, footer: true, navLeft: true };
 
     if (!compareTwoObject(layoutUpdated, layout)) {
@@ -33,9 +33,9 @@ const Main = ({ isAuthenticated }) => {
       style={{
         marginTop: isAuthenticated && layout.header && HEADER_H + 24,
         marginBottom: isAuthenticated && layout.footer && FOOTER_H + 24,
-        marginLeft: isAuthenticated && 24,
-        marginRight: isAuthenticated && 24,
-        padding: isAuthenticated && 24,
+        marginLeft: isAuthenticated && layout.navLeft && 24,
+        marginRight: isAuthenticated && layout.navLeft && 24,
+        padding: isAuthenticated && layout.navLeft && 24,
       }}
     >
       <Switch>

@@ -1,14 +1,25 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { Layout, Menu } from 'antd';
 import { Link } from 'react-router-dom';
 import { MailOutlined } from '@ant-design/icons';
 import { getOpenKeys, MENU_KEYS, NAV_LEFT } from '../constants/nav-left';
+import useWindowSize from '@/hooks/useWindowSize';
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
 
 const NavLeft = ({ collapsed, setCollapsed, display }) => {
   const [openKeys, setOpenKeys] = useState(getOpenKeys());
+
+  const { width } = useWindowSize();
+
+  useEffect(() => {
+    if (width <= 767) {
+      setCollapsed(true);
+    } else {
+      setCollapsed(false);
+    }
+  }, [width, setCollapsed]);
 
   const onOpenChange = keys => {
     const latestOpenKey = keys.find(key => openKeys.indexOf(key) === -1);

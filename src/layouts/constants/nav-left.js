@@ -5,6 +5,8 @@ import {
   DashboardFilled,
   FormOutlined,
   CommentOutlined,
+  UnorderedListOutlined,
+  ContainerOutlined,
 } from '@ant-design/icons';
 
 export const NAV_LEFT = [
@@ -17,14 +19,14 @@ export const NAV_LEFT = [
   {
     key: 'blog-post',
     label: 'Blog Post',
-    icon: FormOutlined,
+    icon: ContainerOutlined,
     path: '/posts',
     children: [
       {
-        key: '2.0',
-        label: 'Nav 2.0',
-        icon: FormOutlined,
-        path: '/',
+        key: 'blog-post-manage',
+        label: 'Manage',
+        icon: UnorderedListOutlined,
+        path: '/posts/manage',
       },
       {
         key: '2.1',

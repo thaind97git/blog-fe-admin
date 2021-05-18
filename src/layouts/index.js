@@ -38,7 +38,7 @@ const AppLayout = () => {
         <Layout
           className="site-layout"
           style={{
-            marginLeft: marginLeftMainLayout,
+            marginLeft: isAuthenticated && marginLeftMainLayout,
           }}
         >
           <AppHeader
