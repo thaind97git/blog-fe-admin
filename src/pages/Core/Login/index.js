@@ -13,6 +13,7 @@ import { saveToken } from '@/helpers/local-storage';
 import { errorHandler } from '@/helpers/axios';
 
 import LoginBG from '_static/image/icon/login-icon.svg';
+import { setIsAuthenticated } from '@/store/actions/auth';
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -27,6 +28,7 @@ const Login = () => {
       dispatch(setLoading(true));
       const response = await login({ ...values });
       response.data && saveToken(response.data?.tokens?.access?.token);
+      dispatch(setIsAuthenticated(true));
       history.push('/');
     } catch (error) {
       errorHandler(error);

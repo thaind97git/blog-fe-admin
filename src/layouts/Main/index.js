@@ -9,7 +9,7 @@ import { setDisplayLayout } from '@/store/actions/layout';
 import { compareTwoObject } from '@/utils';
 import { FOOTER_H, HEADER_H } from '../constants';
 
-const Main = ({ isAuthenticated }) => {
+const Main = () => {
   const layout = useShallowEqualSelector(getDisplayLayout);
   const dispatch = useDispatch();
 
@@ -31,11 +31,11 @@ const Main = ({ isAuthenticated }) => {
     <div
       id="main"
       style={{
-        marginTop: isAuthenticated && layout.header && HEADER_H + 24,
-        marginBottom: isAuthenticated && layout.footer && FOOTER_H + 24,
-        marginLeft: isAuthenticated && layout.navLeft && 24,
-        marginRight: isAuthenticated && layout.navLeft && 24,
-        padding: isAuthenticated && layout.navLeft && 24,
+        marginTop: layout.header && HEADER_H + 24,
+        marginBottom: layout.footer && FOOTER_H + 24,
+        marginLeft: layout.navLeft && 24,
+        marginRight: layout.navLeft && 24,
+        padding: layout.navLeft && 24,
       }}
     >
       <Switch>

@@ -2,20 +2,19 @@ import React, { useState } from 'react';
 import { Layout } from 'antd';
 
 import { getDisplayLayout } from '@/store/selectors/layout';
-import { getIsAuthenticated } from '@/store/selectors/auth';
 
 import { useShallowEqualSelector } from '@/hooks/useShallowEqualSelector';
 import AppHeader from './Header';
 import Footer from './Footer';
 import Main from './Main';
 import NavLeft from './Nav-Left';
+import Auth from './Auth';
 
 import { NAV_LEFT_W, NAV_LEFT_W_COLLAPSED } from './constants';
 
 const AppLayout = () => {
   const [collapsed, setCollapsed] = useState();
 
-  const isAuthenticated = useShallowEqualSelector(getIsAuthenticated);
   const layout = useShallowEqualSelector(getDisplayLayout);
 
   let marginLeftMainLayout = 0;
@@ -33,23 +32,19 @@ const AppLayout = () => {
         <NavLeft
           collapsed={collapsed}
           setCollapsed={setCollapsed}
-          display={isAuthenticated && layout.navLeft}
+          display={layout.navLeft}
         />
         <Layout
           className="site-layout"
           style={{
-            marginLeft: isAuthenticated && marginLeftMainLayout,
+            marginLeft: marginLeftMainLayout,
           }}
         >
-          <AppHeader
-            display={isAuthenticated && layout.header}
-            collapsed={collapsed}
-          />
-          <Main isAuthenticated={isAuthenticated} />
-          <Footer
-            display={isAuthenticated && layout.footer}
-            collapsed={collapsed}
-          />
+          <AppHeader display={layout.header} collapsed={collapsed} />
+          <Auth>
+            <Main />
+          </Auth>
+          <Footer display={layout.footer} collapsed={collapsed} />
         </Layout>
       </Layout>
     </div>

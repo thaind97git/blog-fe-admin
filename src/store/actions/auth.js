@@ -4,6 +4,7 @@ import store, { history } from '@/store';
 import { getToken, removeToken } from '@/helpers/local-storage';
 export const SET_AUTHENTICATED = 'SET_AUTHENTICATED';
 export const SET_CURRENT_USER = 'SET_CURRENT_USER';
+export const LOGIN = 'LOGIN';
 export const LOG_OUT = 'LOG_OUT';
 
 export const verifyToken = () => async dispatch => {
@@ -38,6 +39,13 @@ export const setCurrentUser = currentUser => ({
   type: SET_CURRENT_USER,
   payload: currentUser,
 });
+
+export const login = currentUser => {
+  return {
+    type: LOGIN,
+    payload: currentUser,
+  };
+};
 
 export const logout = () => {
   removeToken();
