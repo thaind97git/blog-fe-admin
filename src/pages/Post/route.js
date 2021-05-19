@@ -3,6 +3,7 @@ import withAuth from '@/components/HOC/withAuth';
 
 const Posts = lazy(() => import('./index'));
 const EditPost = lazy(() => import('./components/Edit'));
+const CreatePost = lazy(() => import('./components/Create'));
 
 export default [
   {
@@ -16,5 +17,11 @@ export default [
     path: '/posts/details',
     exact: true,
     component: withAuth(EditPost),
+  },
+  {
+    name: 'posts-create',
+    path: '/posts/create',
+    exact: true,
+    component: withAuth(CreatePost),
   },
 ];

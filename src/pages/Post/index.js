@@ -86,11 +86,13 @@ const Posts = () => {
 
   const [dateRange, setDateRange] = useState({});
   const [dataSource, setDataSource] = useState([]);
+  const [refreshTable, setRefreshTable] = useState(null);
 
   const updateStatus = async (id, isPublish) => {
     dispatch(setLoading(true));
     try {
       await updatePostStatus(id, { isPublish });
+      setRefreshTable(prev => !prev);
     } catch (error) {
       errorHandler(error);
     }
@@ -101,7 +103,7 @@ const Posts = () => {
     <MainTitle
       title="Post management"
       actions={
-        <Button type="primary" onClick={() => {}}>
+        <Button type="primary" onClick={() => goURL('/posts/create')}>
           Create new Post
         </Button>
       }
@@ -121,6 +123,9 @@ const Posts = () => {
         dateRangeProps={{
           dateRange,
           setDateRange,
+        }}
+        searchProps={{
+          exCondition: [refreshTable],
         }}
       />
     </div>

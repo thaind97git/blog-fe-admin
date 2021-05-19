@@ -4,15 +4,21 @@ import marked from 'marked';
 
 import { functionCaller } from '@/utils';
 
-const Markdown = ({ onChange, defaultValue = '', height = 400, ...others }) => {
-  const [value, setValue] = useState(defaultValue);
+const Markdown = ({
+  onChange,
+  defaultValue = '',
+  height = 400,
+  value,
+  ...others
+}) => {
+  const [mdValue, setMDValue] = useState(defaultValue || value || '');
   return (
     <div className="container">
       <MDEditor
         height={height}
-        value={value}
+        value={mdValue}
         onChange={value => {
-          setValue(value);
+          setMDValue(value);
           functionCaller(onChange, value, marked(value));
         }}
         {...others}
