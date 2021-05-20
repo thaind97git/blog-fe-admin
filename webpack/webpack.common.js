@@ -127,6 +127,7 @@ module.exports = {
     new WebpackManifestPlugin(),
     new LodashModuleReplacementPlugin(),
     // new webpack.optimize.UglifyJsPlugin({}),
+    new webpack.ProgressPlugin(),
   ],
   optimization: {
     minimizer: [new UglifyJsPlugin()],

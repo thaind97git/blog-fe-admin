@@ -1,6 +1,7 @@
 /* eslint-disable indent */
 process.env.NODE_ENV = 'production';
 const path = require('path');
+const webpack = require('webpack');
 const { merge } = require('webpack-merge');
 const common = require('./webpack.common.js');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
@@ -19,6 +20,12 @@ module.exports = merge(common, {
   mode: 'production',
   devtool: shouldUseSourceMap ? 'source-map' : false,
   plugins: [
+    new webpack.ids.HashedModuleIdsPlugin({
+      context: __dirname,
+      hashFunction: 'sha256',
+      hashDigest: 'hex',
+      hashDigestLength: 20,
+    }),
     new CopyWebpackPlugin({
       patterns: [
         {
@@ -38,6 +45,9 @@ module.exports = merge(common, {
       // both options are optional
       filename: 'static/css/[name].[contenthash:8].css',
       chunkFilename: 'static/css/[name].[contenthash:8].chunk.css',
+      // Ignore conflict css when build prod
+      // https://github.com/webpack-contrib/mini-css-extract-plugin/issues/250#issuecomment-415345126
+      ignoreOrder: true,
     }),
     new HtmlWebpackPlugin({
       inject: true,
@@ -57,6 +67,7 @@ module.exports = merge(common, {
     }),
   ],
   output: {
+    pathinfo: true,
     publicPath: '',
     // There will be one main bundle, and one file per asynchronous chunk.
     // In development, it does not produce real files.
@@ -65,7 +76,7 @@ module.exports = merge(common, {
     chunkFilename: 'static/js/[name].[contenthash:8].chunk.js',
   },
   optimization: {
-    // minimize: true,
+    minimize: true,
     minimizer: [
       // This is only used in production mode
       new TerserPlugin({

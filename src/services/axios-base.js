@@ -7,7 +7,7 @@ import { getHeaders } from '@/utils';
 // Make an 'instance' of axios
 const instance = axios.create({
   // .. where we make our configurations
-  baseURL: process.env.REACT_APP_API_SERVER_URL,
+  baseURL: process.env.REACT_APP_API_SERVER_URL || 'http://localhost:3000/v1',
 });
 
 instance.interceptors.request.use(
