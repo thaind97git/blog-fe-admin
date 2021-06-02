@@ -3,7 +3,7 @@ import { Button, Modal, Skeleton } from 'antd';
 
 import { getSocials } from '@/apis/social';
 
-import useGetRequest from '@/hooks/useGetRequest';
+import useGet from '@/hooks/useGet';
 import EmptyRecord from '@/components/Empty-Record';
 import MainTitle from '@/components/Main-Title';
 import CreateSocial from './components/Create';
@@ -13,8 +13,8 @@ const Socials = () => {
   const [refreshSocials, setRefreshSocial] = useState(false);
   const [openCreate, setOpenCreate] = useState(false);
 
-  const { data: socials, fetching: fetchingSocials } = useGetRequest({
-    promiseFunction: getSocials,
+  const { data: socials, fetching: fetchingSocials } = useGet({
+    func: getSocials,
     refresh: refreshSocials,
   });
 

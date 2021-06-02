@@ -3,7 +3,7 @@ import { Button, Modal, Skeleton } from 'antd';
 
 import { getTags } from '@/apis/tag';
 
-import useGetRequest from '@/hooks/useGetRequest';
+import useGet from '@/hooks/useGet';
 import EmptyRecord from '@/components/Empty-Record';
 import MainTitle from '@/components/Main-Title';
 import CreateTag from './components/Create';
@@ -13,8 +13,8 @@ const Tags = () => {
   const [refreshTags, setRefreshTag] = useState(false);
   const [openCreate, setOpenCreate] = useState(false);
 
-  const { data: tags, fetching: fetchingTags } = useGetRequest({
-    promiseFunction: getTags,
+  const { data: tags, fetching: fetchingTags } = useGet({
+    func: getTags,
     refresh: refreshTags,
   });
 

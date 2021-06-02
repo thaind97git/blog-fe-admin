@@ -3,10 +3,10 @@ import { useDispatch } from 'react-redux';
 import { Button, Form, Row, Skeleton, Space } from 'antd';
 import { UndoOutlined, SaveOutlined } from '@ant-design/icons';
 
-import { getTagById, updateTag } from '@/apis/tag';
+import { getSocialById, updateSocial } from '@/apis/social';
 import { setLoading } from '@/store/actions';
 
-import useGetRequest from '@/hooks/useGetRequest';
+import useGet from '@/hooks/useGet';
 import Input from '@/components/Input';
 import FormItem from '@/components/Form/FormItem';
 import EmptyRecord from '@/components/Empty-Record';
@@ -15,30 +15,29 @@ import { errorHandler } from '@/helpers/axios';
 import { toastSuccess } from '@/helpers/toast';
 import { functionCaller, compareTwoObject } from '@/utils';
 
-const EditTag = ({ onCallbackSuccess, onCallbackError, tagId }) => {
+const EditSocial = ({ onCallbackSuccess, onCallbackError, socialId }) => {
   const [formUpdate] = Form.useForm();
-  const [tag, setTag] = useState(null);
+  const [social, setSocial] = useState(null);
   const [defaultForm, setDefaultForm] = useState(null);
 
   const dispatch = useDispatch();
 
   const onChangeInputForm = event => {
-    setTag(prev => ({ ...prev, [event.target.name]: event.target.value }));
+    setSocial(prev => ({ ...prev, [event.target.name]: event.target.value }));
   };
 
-  const { data: tagDetails, fetching: fetchingTag } = useGetRequest({
-    promiseFunction: getTagById,
-    triggerCondition: !!tagId,
-    refresh: tagId,
-    param: { id: tagId },
+  const { data: socialDetails, fetching: fetchingSocial } = useGet({
+    func: () => getSocialById({ id: socialId }),
+    triggerCondition: !!socialId,
+    refresh: socialId,
   });
 
   const onSubmit = async values => {
     try {
       dispatch(setLoading(true));
-      await updateTag(tagId, values);
+      await updateSocial(socialId, values);
       functionCaller(onCallbackSuccess);
-      toastSuccess('Update tag successfully');
+      toastSuccess('Update social successfully');
     } catch (error) {
       errorHandler(error);
       functionCaller(onCallbackError);
@@ -48,45 +47,44 @@ const EditTag = ({ onCallbackSuccess, onCallbackError, tagId }) => {
   };
 
   useEffect(() => {
-    if (tagDetails) {
-      setTag(tagDetails);
-      setDefaultForm(tagDetails);
+    if (socialDetails) {
+      setSocial(socialDetails);
+      setDefaultForm(socialDetails);
     }
-  }, [tagDetails]);
+  }, [socialDetails]);
 
   useEffect(() => {
     return () => {
-      setTag(null);
+      setSocial(null);
       setDefaultForm(null);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (fetchingTag) {
+  if (fetchingSocial) {
     return <Skeleton />;
   }
 
-  if (!tag) {
+  if (!social) {
     return <EmptyRecord />;
   }
 
-  const isEqualData = compareTwoObject(tag, defaultForm);
+  const isEqualData = compareTwoObject(social, defaultForm);
 
   return (
     <Form
       form={formUpdate}
-      name="create-tag"
-      initialValues={tag}
+      name="create-social"
+      initialValues={social}
       onFinish={onSubmit}
     >
-      <FormItem name="title" rulesName={['required']}>
-        <Input onChange={onChangeInputForm} label="Title" />
+      <FormItem name="name" rulesName={['required']}>
+        <Input onChange={onChangeInputForm} label="Name" />
       </FormItem>
-      <FormItem name="metaTitle" rulesName={['required']}>
-        <Input onChange={onChangeInputForm} label="Meta Title" />
+      <FormItem name="code" rulesName={['required']}>
+        <Input onChange={onChangeInputForm} label="Code" />
       </FormItem>
-      <FormItem name="slug" rulesName={['required']}>
-        <Input onChange={onChangeInputForm} label="Slug" />
+      <FormItem name="link" rulesName={['required']}>
+        <Input onChange={onChangeInputForm} label="Link" />
       </FormItem>
       <Row justify="center">
         <Space>
@@ -94,7 +92,7 @@ const EditTag = ({ onCallbackSuccess, onCallbackError, tagId }) => {
             icon={<UndoOutlined />}
             disabled={isEqualData}
             onClick={() => {
-              setTag({ ...defaultForm });
+              setSocial({ ...defaultForm });
               formUpdate.resetFields();
             }}
           >
@@ -114,4 +112,4 @@ const EditTag = ({ onCallbackSuccess, onCallbackError, tagId }) => {
   );
 };
 
-export default EditTag;
+export default EditSocial;

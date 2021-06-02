@@ -3,7 +3,7 @@ import { Button, Modal, Skeleton, Space } from 'antd';
 
 import { getResumes, swapPosition } from '@/apis/resume';
 
-import useGetRequest from '@/hooks/useGetRequest';
+import useGet from '@/hooks/useGet';
 import EmptyRecord from '@/components/Empty-Record';
 import MainTitle from '@/components/Main-Title';
 import ListOfResume from './components/List';
@@ -33,8 +33,8 @@ const Resumes = () => {
   const [openCreate, setOpenCreate] = useState(false);
   const [positionSwap, setPositionSwap] = useState({});
 
-  const { data: resumes, fetching: fetchingResumes } = useGetRequest({
-    promiseFunction: getResumes,
+  const { data: resumes, fetching: fetchingResumes } = useGet({
+    func: getResumes,
     refresh: refreshResumes,
   });
 

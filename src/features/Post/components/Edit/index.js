@@ -3,39 +3,52 @@ import { useDispatch } from 'react-redux';
 import { Button, Form, Row, Skeleton } from 'antd';
 
 import { getTags } from '@/apis/tag';
-import { createNewPost } from '@/apis/post';
+import { updatePost, getPost } from '@/apis/post';
+import { setLoading } from '@/store/actions';
+import { getCurrentUser } from '@/store/selectors/auth';
 
-import useGetRequest from '@/hooks/useGetRequest';
+import { getQuery } from '@/hooks/useQuery';
+import useGet from '@/hooks/useGet';
 import { useShallowEqualSelector } from '@/hooks/useShallowEqualSelector';
 import FormInput from '@/components/Input';
 import Markdown from '@/components/Markdown';
 import FormItem from '@/components/Form/FormItem';
+import EmptyRecord from '@/components/Empty-Record';
 import FormSelect from '@/components/Form/Form-Select';
 
 import { ensureArray } from '@/utils';
-import { setLoading } from '@/store/actions';
-import { getCurrentUser } from '@/store/selectors/auth';
 import { errorHandler } from '@/helpers/axios';
 import { goURL } from '@/helpers/router';
 
-const CreatePost = () => {
-  const [createPostForm] = Form.useForm();
+const EditPost = () => {
+  const postId = getQuery('id');
+
+  const [editPostForm] = Form.useForm();
   const dispatch = useDispatch();
   const currentUser = useShallowEqualSelector(getCurrentUser);
 
-  const { data: tags = [], fetching: fetchingTags } = useGetRequest({
-    promiseFunction: getTags,
+  const { data: post, fetching: fetchingPost } = useGet({
+    func: () => getPost({ id: postId }),
+    triggerCondition: !!postId,
   });
 
-  if (fetchingTags) {
+  const { data: tags = [], fetching: fetchingTags } = useGet({
+    func: getTags,
+  });
+
+  if (fetchingPost || fetchingTags) {
     return <Skeleton />;
+  }
+
+  if (!post) {
+    return <EmptyRecord />;
   }
 
   const onSubmit = async values => {
     values.authorId = currentUser.id;
     dispatch(setLoading(true));
     try {
-      await createNewPost(values);
+      await updatePost(post.id, values);
       goURL('/posts/manage');
     } catch (error) {
       errorHandler(error);
@@ -45,8 +58,18 @@ const CreatePost = () => {
   };
 
   return (
-    <div className="post-create">
-      <Form name="create-resume" onFinish={onSubmit} form={createPostForm}>
+    <div className="post-edit">
+      <Form
+        name="update-resume"
+        initialValues={{
+          ...post,
+          skills: '',
+          markdown: '',
+          tags: post.tags.map(tag => tag.id),
+        }}
+        onFinish={onSubmit}
+        form={editPostForm}
+      >
         <FormItem name="title">
           <FormInput placeholder="Title" label="Title" />
         </FormItem>
@@ -73,7 +96,7 @@ const CreatePost = () => {
 
         <Row justify="center">
           <Button type="primary" htmlType="submit">
-            Create
+            Update
           </Button>
         </Row>
       </Form>
@@ -81,4 +104,4 @@ const CreatePost = () => {
   );
 };
 
-export default CreatePost;
+export default EditPost;
