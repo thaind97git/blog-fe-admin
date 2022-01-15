@@ -27,7 +27,7 @@
     "i18next": "^19.9.2",
     "isomorphic-fetch": "^3.0.0",
     "lodash": "^4.17.21",
-    "marked": "^2.0.3",
+    "marked": "^4.0.10",
     "react": "^17.0.1",
     "react-beautiful-dnd": "^13.1.0",
     "react-dom": "^17.0.1",
